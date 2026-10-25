@@ -1,18 +1,46 @@
 ---
 const PRODUCTS = [
   {
+    badge: 'Plataforma Web • B2B',
+    badgeBg: 'bg-white/90 ring-1 ring-black/10',
+    badgeText: 'text-[#6b5410]',
+    name: 'CivilCardex',
+    tagline: 'Plataforma web de inteligencia en ingeniería civil',
+    taglineColor: 'text-[#9a7b1f]',
+    desc: 'Plataforma web de inteligencia en ingeniería civil: módulos que cubren diseño hidrosanitario, estructural, topografía y vías, con verificación normativa automática (IPC/UPC, NFPA, NTC, NSR-10, RAS 2000) y memorias de cálculo exportables.',
+    checkColor: 'text-[#9a7b1f]',
+    features: [
+      'Diseño de redes sobre planos con cálculo en tiempo real',
+      'Estructuras, terreno y diseño geométrico de vías',
+      'Presupuestos y APU con memorias de cálculo exportables',
+    ],
+    cta: 'Explorar CivilCardex',
+    playBadge: false,
+    href: 'https://civilcardex.com',
+    external: true,
+    hoverBg: 'hover:bg-[#efe3c0]',
+    hoverText: 'hover:text-[#4a3a10]',
+    textColor: 'text-[#8a6a15]',
+    logo: '/civilCardexlogo-t96.png',
+    panelFrom: 'from-[#1d1d23]',
+    panelTo: 'to-[#0a0a0d]',
+    nameColor: 'text-[#ffd54a]',
+    faceInk: '#f2f2f4',
+    faceInkSoft: 'rgba(242, 242, 244, 0.7)',
+  },
+  {
     badge: 'App Móvil • Google Play',
     badgeBg: 'bg-white/90 ring-1 ring-black/10',
     badgeText: 'text-[#6b5410]',
     name: 'Reverzo',
-    tagline: 'Compra y venta de libros entre lectores, con clubes de lectura',
+    tagline: 'Compra, vende y revende libros',
     taglineColor: 'text-[#8a6a15]',
     desc: 'Marketplace móvil moderado para comprar y vender libros usados y nuevos entre lectores. Publica con fotos y filtros, coordina el trato por chat y únete a clubes de lectura activos.',
     checkColor: 'text-[#8a6a15]',
     features: [
-      'Publica libros con fotos, precios y filtros por categoría y estado',
+      'Publica libros con fotos, precios, estado y categoría',
       'Chat directo comprador–vendedor y calculadora de envíos',
-      'Clubes de lectura públicos y privados con muro y valoraciones',
+      'Comunidades de lectura públicos y privados con chat y valoraciones',
     ],
     cta: 'Ver en Google Play',
     playBadge: true,
@@ -33,14 +61,14 @@ const PRODUCTS = [
     badgeBg: 'bg-white/90 ring-1 ring-black/10',
     badgeText: 'text-[#6b5410]',
     name: 'Suti',
-    tagline: 'Tus gastos y tu saldo, bajo control — solo o en grupo',
+    tagline: 'Lleva el control de tu vida financiera, tu saldo y tus gastos',
     taglineColor: 'text-[#6b7080]',
     desc: 'Lleva tu saldo en fondos, registra gastos por categoría y divide los gastos compartidos con tus amigos. Historial claro, gráficos de balance y todo gratis desde tu celular.',
     checkColor: 'text-[#6b7080]',
     features: [
-      'Fondos con saldo disponible que se descuenta en tiempo real',
+      'Ingresos, fondos y saldos actualizados en tiempo real',
       'Gastos por categorías, historial por día o mes y gráficos de balance',
-      'Gastos compartidos con contactos y división de porcentajes',
+      'Gastos compartidos con contactos y división en porcentajes',
     ],
     cta: 'Ver en Google Play',
     playBadge: true,
@@ -56,42 +84,14 @@ const PRODUCTS = [
     faceInk: '#f2f2f4',
     faceInkSoft: 'rgba(242, 242, 244, 0.7)',
   },
-  {
-    badge: 'Plataforma Web • B2B',
-    badgeBg: 'bg-white/90 ring-1 ring-black/10',
-    badgeText: 'text-[#6b5410]',
-    name: 'CivilCardex',
-    tagline: 'Hidrosanitario, Estructuras, Terreno, Vías y Presupuestos',
-    taglineColor: 'text-[#9a7b1f]',
-    desc: 'Plataforma web de inteligencia en ingeniería civil: módulos que cubren diseño hidrosanitario, estructural, topografía y vías, con verificación normativa automática (IPC/UPC, NFPA, NTC, NSR-10, RAS 2000) y memorias de cálculo exportables.',
-    checkColor: 'text-[#9a7b1f]',
-    features: [
-      'Diseño de redes sobre planos con cálculo en tiempo real (Civil Flow)',
-      'Estructuras, terreno y diseño geométrico de vías',
-      'Presupuestos y APU con memorias de cálculo exportables',
-    ],
-    cta: 'Explorar CivilCardex',
-    playBadge: false,
-    href: 'https://civilcardex.com',
-    external: true,
-    hoverBg: 'hover:bg-[#efe3c0]',
-    hoverText: 'hover:text-[#4a3a10]',
-    textColor: 'text-[#8a6a15]',
-    logo: '/civilCardexlogo-t96.png',
-    panelFrom: 'from-[#1d1d23]',
-    panelTo: 'to-[#0a0a0d]',
-    nameColor: 'text-[#ffd54a]',
-    faceInk: '#f2f2f4',
-    faceInkSoft: 'rgba(242, 242, 244, 0.7)',
-  },
 ];
 ---
 
-<section class="w-full relative overflow-hidden" id="productos-insignia" style="background:linear-gradient(180deg, #cfd1d8 0px, #e9eaee 40%, #ffffff 100%)">
+<section class="w-full relative overflow-hidden" id="productos-insignia" style="background:linear-gradient(180deg, #b6b9c2 0px, #e0e1e5 40%, #ffffff 100%)">
 
   <div class="max-w-max-width-content mx-auto px-gutter-desktop relative">
     <div data-reveal class="text-center max-w-3xl mx-auto pt-space-3xl pb-space-md space-y-space-xs">
-      <h2 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Nuestros 3 Productos Insignia</h2>
+      <h2 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Nuestros 3 productos insignia</h2>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
         Soluciones diseñadas para resolver desafíos críticos de automatización, gestión y operaciones técnicas con alta disponibilidad.
       </p>
@@ -101,7 +101,7 @@ const PRODUCTS = [
       <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.22), transparent 62%); filter:blur(30px)"></div>
       <div class="caro-perspective relative h-[34rem] sm:h-[30rem] cursor-grab active:cursor-grabbing">
         {PRODUCTS.map((p, i) => (
-          <article data-caro-face class="caro-face absolute left-1/2 top-1/2 w-[85vw] max-w-[30rem] flex flex-col justify-center text-center px-space-lg sm:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(180deg, ${p.panelFrom.replace('from-[#', '#').replace(']', '')}, ${p.panelTo.replace('to-[#', '#').replace(']', '')})`}>
+          <article data-caro-face class="caro-face absolute left-1/2 top-1/2 w-[85vw] max-w-[30rem] flex flex-col justify-center text-center px-space-lg sm:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
             <img src={p.logo} alt={`${p.name} logo`} class="w-14 h-14 object-contain drop-shadow-lg mt-space-xl mb-space-sm self-center" />
             <span class={`px-3 py-1 rounded-full font-label-sm text-label-sm ${p.badgeBg} ${p.badgeText} font-semibold mb-space-md self-center`}>{p.badge}</span>
             <h3 class="font-display-hero text-display-hero-mobile tracking-tight font-extrabold drop-shadow-sm" style={`color:${p.faceInk}`}>{p.name}</h3>
@@ -159,6 +159,16 @@ const PRODUCTS = [
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
   }
   .caro-face[data-pos="0"] .name-rule { transform: scaleX(1); }
+  .caro-face[data-pos="0"] {
+    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease, box-shadow 0.45s ease;
+  }
+  .caro-face[data-pos="0"]:hover {
+    box-shadow:
+      0 0 0 2.5px rgba(233, 207, 122, 0.95),
+      0 0 18px rgba(233, 207, 122, 0.55),
+      0 0 60px rgba(201, 169, 97, 0.55),
+      0 24px 64px -16px rgba(0, 0, 0, 0.35);
+  }
   .caro-num {
     color: #b8952e; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em;
     min-width: 1.7rem; padding-top: 0.15rem; font-family: 'Plus Jakarta Sans', sans-serif;
