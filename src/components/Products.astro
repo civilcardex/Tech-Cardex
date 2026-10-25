@@ -101,7 +101,7 @@ const PRODUCTS = [
       <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.22), transparent 62%); filter:blur(30px)"></div>
       <div class="caro-perspective relative h-[34rem] sm:h-[30rem] cursor-grab active:cursor-grabbing">
         {PRODUCTS.map((p, i) => (
-          <article data-caro-face class="caro-face absolute left-1/2 top-1/2 w-[85vw] max-w-[30rem] flex flex-col justify-center text-center px-space-lg sm:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
+          <article data-caro-face class="caro-face absolute left-1/2 top-1/2 w-[85vw] max-w-[30rem] flex flex-col justify-center text-center px-4 sm:px-space-lg lg:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
             <img src={p.logo} alt={`${p.name} logo`} class="w-14 h-14 object-contain drop-shadow-lg mt-space-xl mb-space-sm self-center" />
             <span class={`px-3 py-1 rounded-full font-label-sm text-label-sm ${p.badgeBg} ${p.badgeText} font-semibold mb-space-md self-center`}>{p.badge}</span>
             <h3 class="font-display-hero text-display-hero-mobile tracking-tight font-extrabold drop-shadow-sm" style={`color:${p.faceInk}`}>{p.name}</h3>
@@ -122,10 +122,10 @@ const PRODUCTS = [
           </article>
         ))}
       </div>
-      <button data-caro-prev aria-label="Anterior" class="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
+      <button data-caro-prev aria-label="Anterior" class="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
-      <button data-caro-next aria-label="Siguiente" class="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
+      <button data-caro-next aria-label="Siguiente" class="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
       <div class="flex items-center justify-center gap-space-md mt-space-md relative z-10">
