@@ -29,19 +29,13 @@
   }
 }
 
-/* Patrón de rejilla de puntos para fondos */
-.bg-dots {
-  background-image: radial-gradient(rgba(0, 97, 148, 0.16) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
 /* Selección de texto con el color de marca */
 ::selection {
   background: #efe3c0;
   color: #4a3a10;
 }
 
-/* Scrollbar fina y con el color de marca (antes estaba oculta) */
+/* Scrollbar fina y con el color de marca */
 html {
   scrollbar-width: thin;
   scrollbar-color: #c9c4b4 transparent;
@@ -65,7 +59,7 @@ html {
 }
 
 /* Animaciones de aparición al hacer scroll (solo si hay JS) */
-html.js [data-reveal]:not([data-reveal-words]) {
+html.js [data-reveal] {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
@@ -76,144 +70,11 @@ html.js [data-reveal].revealed {
   transform: none;
 }
 
-/* H1: palabras que se materializan (blur + escala), sin deslizamiento */
-html.js [data-reveal-words] .wline {
-  display: inline-block;
-  overflow: visible;
-  vertical-align: bottom;
-}
-html.js [data-reveal-words] .wword {
-  display: inline-block;
-  opacity: 0;
-  transform: scale(0.85);
-  filter: blur(12px);
-  transition:
-    opacity 0.45s ease,
-    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.45s ease;
-  will-change: opacity, transform, filter;
-}
-html.js [data-reveal-words].revealed .wword {
-  opacity: 1;
-  transform: none;
-  filter: blur(0);
-}
-
-/* Rótulo que se traza bajo el titular */
-html.js .hero-rule {
-  transform: scaleX(0);
-  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
-}
-html.js .hero-rule.revealed {
-  transform: scaleX(1);
-}
-
-/* Texto fantasma delineado del hero */
-.hero-echo {
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgba(147, 204, 255, 0.13);
-  animation: echo-drift 18s ease-in-out infinite;
-}
-@keyframes echo-drift {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-2.5rem); }
-}
-
-/* Tilt 3D + spotlight en tarjetas de producto */
-.tilt {
-  transition: transform 0.12s ease-out, box-shadow 0.3s ease;
-}
-.tilt-glow {
-  background: radial-gradient(480px circle at var(--mx, 50%) var(--my, 50%), rgba(201, 169, 97, 0.16), transparent 45%);
-}
-
-/* Variantes para secciones oscuras */
-.bg-dots-light {
-  background-image: radial-gradient(rgba(201, 169, 97, 0.16) 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-.text-glow {
-  filter: drop-shadow(0 0 28px rgba(147, 204, 255, 0.35));
-}
-
-/* Aurora: manchas de color en movimiento lento */
-@keyframes aurora-a {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(6rem, 4rem) scale(1.15); }
-  66% { transform: translate(-3rem, 7rem) scale(0.9); }
-}
-@keyframes aurora-b {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  40% { transform: translate(-7rem, -3rem) scale(1.2); }
-  75% { transform: translate(3rem, 2rem) scale(0.95); }
-}
-.aurora-a { animation: aurora-a 26s ease-in-out infinite; }
-.aurora-b { animation: aurora-b 32s ease-in-out infinite; }
-
 /* Barra de progreso de scroll */
 .scroll-progress {
   transform-origin: 0 50%;
   transform: scaleX(0);
-  background: linear-gradient(90deg, #93ccff, #b7c4ff, #ffb599);
-}
-
-/* Checks que se dibujan (dentro de tarjetas con data-reveal) */
-.ck-ring,
-.ck-mark {
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-html.js [data-reveal] .ck-ring {
-  stroke-dasharray: 63;
-  stroke-dashoffset: 63;
-}
-html.js [data-reveal] .ck-mark {
-  stroke-dasharray: 11;
-  stroke-dashoffset: 11;
-}
-html.js [data-reveal].revealed .ck-ring {
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 0.5s ease;
-}
-html.js [data-reveal].revealed .ck-mark {
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset 0.3s ease 0.35s;
-}
-
-/* Botón magnético */
-[data-magnetic] {
-  will-change: transform;
-}
-
-/* Estado cerrado de paneles producto: logo flotando + radar + destello */
-@keyframes float-y {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-9px); }
-}
-.logo-float {
-  animation: float-y 3.2s ease-in-out infinite;
-}
-@keyframes radar {
-  0% { transform: scale(0.55); opacity: 0.55; }
-  100% { transform: scale(1.75); opacity: 0; }
-}
-.logo-radar {
-  animation: radar 2.6s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
-}
-@keyframes sheen {
-  0%, 55% { transform: translateX(-160%) skewX(-18deg); }
-  100% { transform: translateX(260%) skewX(-18deg); }
-}
-.panel-sheen::after {
-  content: '';
-  position: absolute;
-  top: -20%;
-  bottom: -20%;
-  width: 45%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
-  animation: sheen 5.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #e3c56a, #c9a961, #9fa3ad);
 }
 
 /* Sombra extra del header al hacer scroll */
@@ -226,32 +87,5 @@ header[data-header].is-scrolled {
     opacity: 1;
     transform: none;
     transition: none;
-  }
-  html.js [data-reveal-words] .wword {
-    opacity: 1;
-    transform: none;
-    filter: none;
-    transition: none;
-  }
-  html.js .hero-rule {
-    transform: none;
-    transition: none;
-  }
-  .hero-echo {
-    animation: none;
-  }
-  .aurora-a,
-  .aurora-b {
-    animation: none;
-  }
-  html.js [data-reveal] .ck-ring,
-  html.js [data-reveal] .ck-mark {
-    stroke-dashoffset: 0;
-    transition: none;
-  }
-  .logo-float,
-  .logo-radar,
-  .panel-sheen::after {
-    animation: none;
   }
 }
