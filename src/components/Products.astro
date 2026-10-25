@@ -102,7 +102,7 @@ const PRODUCTS = [
       <div class="caro-perspective relative h-[34rem] sm:h-[30rem] cursor-grab active:cursor-grabbing">
         {PRODUCTS.map((p, i) => (
           <article data-caro-face class="caro-face absolute left-1/2 top-1/2 w-[85vw] max-w-[30rem] flex flex-col justify-center text-center px-4 sm:px-space-lg lg:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
-            <img src={p.logo} alt={`${p.name} logo`} class="w-14 h-14 object-contain drop-shadow-lg mt-space-xl mb-space-sm self-center" />
+            <img src={p.logo} width="96" height="96" alt={`${p.name} logo`} class="w-14 h-14 object-contain drop-shadow-lg mt-space-xl mb-space-sm self-center" />
             <span class={`px-3 py-1 rounded-full font-label-sm text-label-sm ${p.badgeBg} ${p.badgeText} font-semibold mb-space-md self-center`}>{p.badge}</span>
             <h3 class="font-display-hero text-display-hero-mobile tracking-tight font-extrabold drop-shadow-sm" style={`color:${p.faceInk}`}>{p.name}</h3>
             <span class="name-rule" aria-hidden="true"></span>
@@ -140,7 +140,7 @@ const PRODUCTS = [
 </section>
 
 <style is:global>
-  .caro-perspective { perspective: 1500px; }
+  .caro-perspective { perspective: 1500px; touch-action: pan-y; }
   .caro-face {
     transform: translate(-50%, -50%) translateX(var(--tx, 0px)) rotateY(var(--ry, 0deg)) scale(var(--sc, 1));
     transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease, box-shadow 0.9s ease;
@@ -178,5 +178,5 @@ const PRODUCTS = [
     background: rgba(19, 27, 46, 0.18); border: none; cursor: pointer;
     transition: all 0.3s ease;
   }
-  .caro-dot.is-active { background: #006194; transform: scale(1.35); }
+  .caro-dot.is-active { background: #b8952e; transform: scale(1.35); }
 </style>
