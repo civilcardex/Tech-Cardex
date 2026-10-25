@@ -1,0 +1,201 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const { title = 'TechCardex' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content="TechCardex: ecosistema de software enterprise. Reverzo, Suti Finanzas y CivilCardex — aplicaciones móviles y plataformas de ingeniería para organizaciones globales." />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="Ecosistema de software enterprise: Reverzo, Suti Finanzas y CivilCardex. Aplicaciones móviles y plataformas de ingeniería para organizaciones globales." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+  </head>
+  <body class="bg-white font-body-md text-body-md text-on-surface antialiased">
+    <div class="scroll-progress fixed top-0 left-0 right-0 h-0.5 z-[60]" data-progress></div>
+    <Header />
+    <main class="w-full pt-20 bg-white min-h-screen">
+      <slot />
+    </main>
+    <Footer />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      window.addEventListener('DOMContentLoaded', () => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const header = document.querySelector('[data-header]');
+        if (header) {
+          const onHeaderScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+          onHeaderScroll();
+          window.addEventListener('scroll', onHeaderScroll, { passive: true });
+        }
+
+        const pending = new Set(document.querySelectorAll('[data-reveal]'));
+        const counters = document.querySelectorAll('[data-count-to]');
+        const parallaxEls = document.querySelectorAll('[data-parallax]');
+        const ticks = document.querySelectorAll('[data-tick]');
+
+        const runCount = (el) => {
+          const target = parseFloat(el.dataset.countTo);
+          const decimals = parseInt(el.dataset.decimals || '0', 10);
+          const start = performance.now();
+          const duration = 1400;
+          const tick = (now) => {
+            const p = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = (target * eased).toFixed(decimals);
+            if (p < 1) setTimeout(() => tick(performance.now()), 16);
+          };
+          tick(start);
+        };
+
+        const SCRAMBLE_CHARS = '!<>-_\\/[]{}=+*^?#';
+        const runScramble = (el) => {
+          const finalText = el.textContent;
+          const start = performance.now();
+          const duration = 1200;
+          const tick = (now) => {
+            const p = Math.min((now - start) / duration, 1);
+            const reveal = Math.floor(p * finalText.length);
+            let out = finalText.slice(0, reveal);
+            for (let i = reveal; i < finalText.length; i++) {
+              out += finalText[i] === ' ' ? ' ' : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+            }
+            el.textContent = out;
+            if (p < 1) setTimeout(() => tick(performance.now()), 30);
+          };
+          tick(start);
+        };
+
+        const check = () => {
+          const vh = window.innerHeight;
+          const max = document.documentElement.scrollHeight - vh;
+          document.querySelector('[data-progress]').style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0).toFixed(4) + ')';
+          pending.forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (r.top < vh - 40 && r.bottom > 0) {
+              el.classList.add('revealed');
+              pending.delete(el);
+              el.querySelectorAll('[data-scramble]').forEach((s) => {
+                if (!s.dataset.done) {
+                  s.dataset.done = '1';
+                  if (!reduced) runScramble(s);
+                }
+              });
+            }
+          });
+          if (!reduced) {
+            counters.forEach((el) => {
+              if (el.dataset.done) return;
+              const r = el.getBoundingClientRect();
+              if (r.top < vh && r.bottom > 0) {
+                el.dataset.done = '1';
+                runCount(el);
+              }
+            });
+            parallaxEls.forEach((el) => {
+              el.style.transform = 'translateY(' + (window.scrollY * parseFloat(el.dataset.parallax)).toFixed(1) + 'px)';
+            });
+          }
+        };
+
+        window.addEventListener('scroll', check, { passive: true });
+        window.addEventListener('resize', check, { passive: true });
+        check();
+
+        // Tilt 3D + spotlight en tarjetas (solo puntero fino)
+        if (!reduced && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          document.querySelectorAll('[data-tilt]').forEach((card) => {
+            card.addEventListener('mousemove', (e) => {
+              const r = card.getBoundingClientRect();
+              const x = (e.clientX - r.left) / r.width - 0.5;
+              const y = (e.clientY - r.top) / r.height - 0.5;
+              card.style.transform = 'perspective(900px) rotateX(' + (-y * 5).toFixed(2) + 'deg) rotateY(' + (x * 5).toFixed(2) + 'deg) translateY(-6px)';
+              card.style.setProperty('--mx', (e.clientX - r.left).toFixed(0) + 'px');
+              card.style.setProperty('--my', (e.clientY - r.top).toFixed(0) + 'px');
+            });
+            card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+          });
+        }
+
+        // Botón magnético (solo puntero fino)
+        if (!reduced && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          document.querySelectorAll('[data-magnetic]').forEach((btn) => {
+            btn.addEventListener('mousemove', (e) => {
+              const r = btn.getBoundingClientRect();
+              const x = e.clientX - (r.left + r.width / 2);
+              const y = e.clientY - (r.top + r.height / 2);
+              btn.style.transform = 'translate(' + (x * 0.25).toFixed(1) + 'px,' + (y * 0.35).toFixed(1) + 'px)';
+            });
+            btn.addEventListener('mouseleave', () => {
+              btn.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
+              btn.style.transform = '';
+              setTimeout(() => { btn.style.transition = ''; }, 400);
+            });
+          });
+        }
+
+        // Carrusel 3D de productos (coverflow: flechas, dots, arrastre)
+        document.querySelectorAll('[data-caro3d]').forEach((caro) => {
+          const faces = [...caro.querySelectorAll('[data-caro-face]')];
+          const dots = [...caro.querySelectorAll('[data-caro-dot]')];
+          const n = faces.length;
+          let cur = 0;
+          const upd = () => {
+            faces.forEach((f, i) => {
+              const rel = ((i - cur) % n + n) % n;
+              f.dataset.pos = rel === 0 ? '0' : rel === 1 ? '1' : '-1';
+            });
+            dots.forEach((d, di) => d.classList.toggle('is-active', di === cur));
+            caro.dataset.caroCurrent = cur;
+          };
+          const go = (dir) => { cur = (cur + dir + n) % n; upd(); };
+          caro.querySelector('[data-caro-prev]').addEventListener('click', () => go(-1));
+          caro.querySelector('[data-caro-next]').addEventListener('click', () => go(1));
+          dots.forEach((d, di) => d.addEventListener('click', () => { cur = di; upd(); }));
+          // arrastre / swipe
+          let sx = null;
+          const zone = caro.querySelector('.caro-perspective');
+          zone.addEventListener('pointerdown', (e) => { sx = e.clientX; });
+          window.addEventListener('pointerup', (e) => {
+            if (sx === null) return;
+            const dx = e.clientX - sx;
+            sx = null;
+            if (Math.abs(dx) > 48) go(dx < 0 ? 1 : -1);
+          });
+          upd();
+        });
+
+        // Datos en vivo: fluctuación leve cada 2.6s
+        if (!reduced && ticks.length) {
+          setInterval(() => {
+            if (document.hidden) return;
+            ticks.forEach((el) => {
+              const base = parseFloat(el.dataset.base);
+              const jitter = parseFloat(el.dataset.jitter || '0');
+              const v = base + (Math.random() * 2 - 1) * jitter;
+              el.textContent = (el.dataset.prefix || '') + v.toFixed(parseInt(el.dataset.decimals || '0', 10)) + (el.dataset.suffix || '');
+            });
+          }, 2600);
+        }
+
+        // Red de seguridad: si en 4s no ha llegado ningún scroll, revelar todo
+        let scrolled = false;
+        const markScrolled = () => { scrolled = true; };
+        window.addEventListener('scroll', markScrolled, { passive: true, once: true });
+        setTimeout(() => {
+          if (scrolled) return;
+          pending.forEach((el) => el.classList.add('revealed'));
+          pending.clear();
+        }, 4000);
+      });
+    </script>
+  </body>
+</html>
