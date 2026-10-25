@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Products from '../components/Products.astro';
+
+// ponytail: página autocontenida, sin componentes nuevos. Productos reutilizados abajo.
+---
+
+<Layout title="TechCardex - Acerca de Nosotros">
+  <section class="relative w-full overflow-hidden bg-gradient-to-b from-[#0c1220] via-[#111a2e] to-[#161f33] py-space-3xl lg:py-space-4xl">
+    <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.22), transparent 62%); filter:blur(30px)"></div>
+    <div class="max-w-max-width-content mx-auto px-gutter-desktop relative z-10 text-center">
+      <div data-reveal class="inline-block px-3 py-1 rounded-full bg-white/5 text-[#e3c56a] font-label-sm text-label-sm font-semibold uppercase tracking-wider ring-1 ring-white/15 mb-space-md">Quiénes somos</div>
+      <h1 data-reveal class="font-display-hero text-display-hero-mobile md:font-display-hero md:text-display-hero text-white tracking-tight leading-tight max-w-3xl mx-auto">
+        Construimos software que <span class="bg-gradient-to-r from-[#e9cf7a] to-[#b8952e] bg-clip-text text-transparent">perdura</span>
+      </h1>
+      <p data-reveal style="transition-delay:160ms" class="font-body-lg text-body-lg text-white/70 max-w-2xl mx-auto mt-space-md">
+        TechCardex es un equipo de ingenieros que diseña, construye y mantiene productos digitales reales: dos apps en Google Play y una plataforma web de ingeniería civil en producción.
+      </p>
+    </div>
+  </section>
+
+  <section class="w-full bg-white py-space-3xl">
+    <div class="max-w-max-width-content mx-auto px-gutter-desktop grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+      <div data-reveal class="p-space-lg rounded-2xl bg-gradient-to-b from-[#1d1d23] to-[#0a0a0d] text-center">
+        <span class="material-symbols-outlined text-4xl text-[#e3c56a]">code</span>
+        <h3 class="font-headline-sm text-headline-sm text-white font-bold mt-space-sm">Hecho a mano</h3>
+        <p class="font-body-sm text-body-sm text-white/70 mt-space-xs">Cada producto nace de un problema propio y se pule hasta producción. Sin plantillas, sin atajos.</p>
+      </div>
+      <div data-reveal style="transition-delay:120ms" class="p-space-lg rounded-2xl bg-gradient-to-b from-[#1d1d23] to-[#0a0a0d] text-center">
+        <span class="material-symbols-outlined text-4xl text-[#e3c56a]">trending_up</span>
+        <h3 class="font-headline-sm text-headline-sm text-white font-bold mt-space-sm">Evolución constante</h3>
+        <p class="font-body-sm text-body-sm text-white/70 mt-space-xs">Iteramos con usuarios reales: cada versión de Reverzo, Suti y CivilCardex responde a feedback medido.</p>
+      </div>
+      <div data-reveal style="transition-delay:240ms" class="p-space-lg rounded-2xl bg-gradient-to-b from-[#1d1d23] to-[#0a0a0d] text-center">
+        <span class="material-symbols-outlined text-4xl text-[#e3c56a]">verified</span>
+        <h3 class="font-headline-sm text-headline-sm text-white font-bold mt-space-sm">Sello de calidad</h3>
+        <p class="font-body-sm text-body-sm text-white/70 mt-space-xs">Ingeniería con verificación normativa, memorias de cálculo y datos que se cuidan desde el diseño.</p>
+      </div>
+    </div>
+  </section>
+
+  <Products />
+</Layout>
