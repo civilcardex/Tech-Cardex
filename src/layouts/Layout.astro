@@ -30,18 +30,43 @@ const { title = 'TechCardex' } = Astro.props;
       window.addEventListener('DOMContentLoaded', () => {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        const header = document.querySelector('[data-header]');
-        if (header) {
-          const onHeaderScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
-          onHeaderScroll();
-          window.addEventListener('scroll', onHeaderScroll, { passive: true });
-        }
+        /**
+         * Ejecuta un inicializador de forma aislada: si falla, los demas siguen.
+         * @param {string} name
+         * @param {() => void} init
+         * @returns {void}
+         */
+        const safeInit = (name, init) => {
+          try { init(); } catch (err) { console.error('[init:' + name + ']', err); }
+        };
 
-        const pending = new Set(document.querySelectorAll('[data-reveal]'));
-        const counters = document.querySelectorAll('[data-count-to]');
-        const parallaxEls = document.querySelectorAll('[data-parallax]');
-        const ticks = document.querySelectorAll('[data-tick]');
+        /** Sombra extra del header al hacer scroll. */
+        const initHeader = () => {
+          const header = document.querySelector('[data-header]');
+          if (!header) return;
+          const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+          onScroll();
+          window.addEventListener('scroll', onScroll, { passive: true });
+        };
 
+        /** Barra de progreso de lectura (scaleX segun avance). */
+        const initProgress = () => {
+          const bar = document.querySelector('[data-progress]');
+          if (!bar) return;
+          const onScroll = () => {
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            bar.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0).toFixed(4) + ')';
+          };
+          onScroll();
+          window.addEventListener('scroll', onScroll, { passive: true });
+          window.addEventListener('resize', onScroll, { passive: true });
+        };
+
+        /**
+         * Anima un contador [data-count-to] hasta su valor final.
+         * @param {HTMLElement} el
+         * @returns {void}
+         */
         const runCount = (el) => {
           const target = parseFloat(el.dataset.countTo);
           const decimals = parseInt(el.dataset.decimals || '0', 10);
@@ -56,145 +81,120 @@ const { title = 'TechCardex' } = Astro.props;
           tick(start);
         };
 
-        const SCRAMBLE_CHARS = '!<>-_\\/[]{}=+*^?#';
-        const runScramble = (el) => {
-          const finalText = el.textContent;
-          const start = performance.now();
-          const duration = 1200;
-          const tick = (now) => {
-            const p = Math.min((now - start) / duration, 1);
-            const reveal = Math.floor(p * finalText.length);
-            let out = finalText.slice(0, reveal);
-            for (let i = reveal; i < finalText.length; i++) {
-              out += finalText[i] === ' ' ? ' ' : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-            }
-            el.textContent = out;
-            if (p < 1) setTimeout(() => tick(performance.now()), 30);
-          };
-          tick(start);
-        };
-
-        const check = () => {
-          const vh = window.innerHeight;
-          const max = document.documentElement.scrollHeight - vh;
-          document.querySelector('[data-progress]').style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0).toFixed(4) + ')';
-          pending.forEach((el) => {
-            const r = el.getBoundingClientRect();
-            if (r.top < vh - 40 && r.bottom > 0) {
-              el.classList.add('revealed');
-              pending.delete(el);
-              el.querySelectorAll('[data-scramble]').forEach((s) => {
-                if (!s.dataset.done) {
-                  s.dataset.done = '1';
-                  if (!reduced) runScramble(s);
-                }
-              });
-            }
-          });
-          if (!reduced) {
+        /** Contadores: se animan al entrar en viewport (texto final si reduced-motion). */
+        const initCounters = () => {
+          const counters = document.querySelectorAll('[data-count-to]');
+          if (reduced) {
+            counters.forEach((el) => {
+              el.textContent = parseFloat(el.dataset.countTo).toFixed(parseInt(el.dataset.decimals || '0', 10));
+            });
+            return;
+          }
+          const onScroll = () => {
             counters.forEach((el) => {
               if (el.dataset.done) return;
               const r = el.getBoundingClientRect();
-              if (r.top < vh && r.bottom > 0) {
+              if (r.top < window.innerHeight && r.bottom > 0) {
                 el.dataset.done = '1';
                 runCount(el);
               }
             });
-            parallaxEls.forEach((el) => {
-              el.style.transform = 'translateY(' + (window.scrollY * parseFloat(el.dataset.parallax)).toFixed(1) + 'px)';
-            });
-          }
+          };
+          onScroll();
+          window.addEventListener('scroll', onScroll, { passive: true });
         };
 
-        window.addEventListener('scroll', check, { passive: true });
-        window.addEventListener('resize', check, { passive: true });
-        check();
-
-        // Tilt 3D + spotlight en tarjetas (solo puntero fino)
-        if (!reduced && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-          document.querySelectorAll('[data-tilt]').forEach((card) => {
-            card.addEventListener('mousemove', (e) => {
-              const r = card.getBoundingClientRect();
-              const x = (e.clientX - r.left) / r.width - 0.5;
-              const y = (e.clientY - r.top) / r.height - 0.5;
-              card.style.transform = 'perspective(900px) rotateX(' + (-y * 5).toFixed(2) + 'deg) rotateY(' + (x * 5).toFixed(2) + 'deg) translateY(-6px)';
-              card.style.setProperty('--mx', (e.clientX - r.left).toFixed(0) + 'px');
-              card.style.setProperty('--my', (e.clientY - r.top).toFixed(0) + 'px');
+        /** Aparicion [data-reveal] por scroll + red de seguridad a 4s. */
+        const initReveals = () => {
+          const pending = new Set(document.querySelectorAll('[data-reveal]'));
+          const check = () => {
+            const vh = window.innerHeight;
+            pending.forEach((el) => {
+              const r = el.getBoundingClientRect();
+              if (r.top < vh - 40 && r.bottom > 0) {
+                el.classList.add('revealed');
+                pending.delete(el);
+              }
             });
-            card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-          });
-        }
-
-        // Botón magnético (solo puntero fino)
-        if (!reduced && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-          document.querySelectorAll('[data-magnetic]').forEach((btn) => {
-            btn.addEventListener('mousemove', (e) => {
-              const r = btn.getBoundingClientRect();
-              const x = e.clientX - (r.left + r.width / 2);
-              const y = e.clientY - (r.top + r.height / 2);
-              btn.style.transform = 'translate(' + (x * 0.25).toFixed(1) + 'px,' + (y * 0.35).toFixed(1) + 'px)';
-            });
-            btn.addEventListener('mouseleave', () => {
-              btn.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
-              btn.style.transform = '';
-              setTimeout(() => { btn.style.transition = ''; }, 400);
-            });
-          });
-        }
-
-        // Carrusel 3D de productos (coverflow: flechas, dots, arrastre)
-        document.querySelectorAll('[data-caro3d]').forEach((caro) => {
-          const faces = [...caro.querySelectorAll('[data-caro-face]')];
-          const dots = [...caro.querySelectorAll('[data-caro-dot]')];
-          const n = faces.length;
-          let cur = 0;
-          const upd = () => {
-            faces.forEach((f, i) => {
-              const rel = ((i - cur) % n + n) % n;
-              f.dataset.pos = rel === 0 ? '0' : rel === 1 ? '1' : '-1';
-            });
-            dots.forEach((d, di) => d.classList.toggle('is-active', di === cur));
-            caro.dataset.caroCurrent = cur;
           };
-          const go = (dir) => { cur = (cur + dir + n) % n; upd(); };
-          caro.querySelector('[data-caro-prev]').addEventListener('click', () => go(-1));
-          caro.querySelector('[data-caro-next]').addEventListener('click', () => go(1));
-          dots.forEach((d, di) => d.addEventListener('click', () => { cur = di; upd(); }));
-          // arrastre / swipe
-          let sx = null;
-          const zone = caro.querySelector('.caro-perspective');
-          zone.addEventListener('pointerdown', (e) => { sx = e.clientX; });
-          window.addEventListener('pointerup', (e) => {
-            if (sx === null) return;
-            const dx = e.clientX - sx;
-            sx = null;
-            if (Math.abs(dx) > 48) go(dx < 0 ? 1 : -1);
-          });
-          upd();
-        });
+          if (reduced) {
+            pending.forEach((el) => el.classList.add('revealed'));
+            return;
+          }
+          window.addEventListener('scroll', check, { passive: true });
+          window.addEventListener('resize', check, { passive: true });
+          check();
+          // Red de seguridad: si en 4s no ha llegado ningun scroll, revelar todo
+          let scrolled = false;
+          window.addEventListener('scroll', () => { scrolled = true; }, { passive: true, once: true });
+          setTimeout(() => {
+            if (scrolled) return;
+            pending.forEach((el) => el.classList.add('revealed'));
+            pending.clear();
+          }, 4000);
+        };
 
-        // Datos en vivo: fluctuación leve cada 2.6s
-        if (!reduced && ticks.length) {
-          setInterval(() => {
-            if (document.hidden) return;
-            ticks.forEach((el) => {
-              const base = parseFloat(el.dataset.base);
-              const jitter = parseFloat(el.dataset.jitter || '0');
-              const v = base + (Math.random() * 2 - 1) * jitter;
-              el.textContent = (el.dataset.prefix || '') + v.toFixed(parseInt(el.dataset.decimals || '0', 10)) + (el.dataset.suffix || '');
+        /** Carrusel 3D coverflow: flechas, dots, arrastre y accesibilidad. */
+        const initCarousel = () => {
+          document.querySelectorAll('[data-caro3d]').forEach((caro) => {
+            const faces = [...caro.querySelectorAll('[data-caro-face]')];
+            const dots = [...caro.querySelectorAll('[data-caro-dot]')];
+            const n = faces.length;
+            if (!n) return;
+            let cur = 0;
+
+            /** Sincroniza posicion visual, dots y accesibilidad teclado. */
+            const upd = () => {
+              faces.forEach((f, i) => {
+                const rel = ((i - cur) % n + n) % n;
+                f.dataset.pos = rel === 0 ? '0' : rel === 1 ? '1' : '-1';
+                f.querySelectorAll('a').forEach((a) => { a.tabIndex = rel === 0 ? 0 : -1; });
+              });
+              dots.forEach((d, di) => {
+                d.classList.toggle('is-active', di === cur);
+                d.setAttribute('aria-current', di === cur ? 'true' : 'false');
+              });
+              caro.dataset.caroCurrent = String(cur);
+            };
+
+            /**
+             * Avanza el carrusel.
+             * @param {number} dir -1 o 1
+             * @returns {void}
+             */
+            const go = (dir) => { cur = (cur + dir + n) % n; upd(); };
+
+            caro.querySelector('[data-caro-prev]').addEventListener('click', () => go(-1));
+            caro.querySelector('[data-caro-next]').addEventListener('click', () => go(1));
+            dots.forEach((d, di) => d.addEventListener('click', () => { cur = di; upd(); }));
+
+            // Arrastre / swipe: cancela pointer cancelado y suprime click post-drag
+            let sx = null;
+            let dragged = false;
+            const zone = caro.querySelector('.caro-perspective');
+            zone.addEventListener('pointerdown', (e) => { sx = e.clientX; dragged = false; });
+            zone.addEventListener('pointermove', (e) => {
+              if (sx !== null && Math.abs(e.clientX - sx) > 8) dragged = true;
             });
-          }, 2600);
-        }
+            window.addEventListener('pointercancel', () => { sx = null; });
+            window.addEventListener('pointerup', (e) => {
+              if (sx === null) return;
+              const dx = e.clientX - sx;
+              sx = null;
+              if (Math.abs(dx) > 48) go(dx < 0 ? 1 : -1);
+            });
+            zone.addEventListener('click', (e) => {
+              if (dragged) { e.preventDefault(); dragged = false; }
+            }, true);
+            upd();
+          });
+        };
 
-        // Red de seguridad: si en 4s no ha llegado ningún scroll, revelar todo
-        let scrolled = false;
-        const markScrolled = () => { scrolled = true; };
-        window.addEventListener('scroll', markScrolled, { passive: true, once: true });
-        setTimeout(() => {
-          if (scrolled) return;
-          pending.forEach((el) => el.classList.add('revealed'));
-          pending.clear();
-        }, 4000);
+        safeInit('header', initHeader);
+        safeInit('progress', initProgress);
+        safeInit('counters', initCounters);
+        safeInit('reveals', initReveals);
+        safeInit('carousel', initCarousel);
       });
     </script>
   </body>
