@@ -122,10 +122,15 @@ header[data-header].is-scrolled {
 }
 .caro-dot {
   width: 0.65rem; height: 0.65rem; border-radius: 9999px;
-  background: rgba(19, 27, 46, 0.18); border: none; cursor: pointer;
+  background: rgba(255, 255, 255, 0.82); border: 1px solid rgba(19, 27, 46, 0.42); cursor: pointer;
+  box-shadow: 0 1px 3px rgba(19, 27, 46, 0.2);
   transition: all 0.3s ease;
 }
-.caro-dot.is-active { background: #b8952e; transform: scale(1.35); }
+.caro-dot.is-active {
+  background: #1b1b21; border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 2px rgba(27, 27, 33, 0.28), 0 2px 6px rgba(19, 27, 46, 0.34);
+  transform: scale(1.35);
+}
 
 /* Barajado al salir la carta del frente */
 @keyframes deal-out {
