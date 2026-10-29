@@ -87,21 +87,46 @@ const PRODUCTS = [
 ];
 ---
 
-<section class="w-full relative overflow-hidden" id="productos-insignia" style="background:linear-gradient(180deg, #b6b9c2 0px, #e0e1e5 40%, #ffffff 100%)">
+<section class="w-full relative overflow-hidden lg:h-full" id="productos-insignia" style="background:linear-gradient(180deg, #c39a3a 0%, #a8862f 60%, #8f7026 100%)">
+  <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 62% 56% at 50% 50%, #fffef8 0%, #fdf3cf 32%, #ecd28a 58%, #c39a3a 82%, #a8862f 100%)"></div>
 
-  <div class="max-w-max-width-content mx-auto px-gutter-desktop relative">
-    <div data-reveal class="text-center max-w-3xl mx-auto pt-space-3xl pb-space-md space-y-space-xs">
+  <div aria-hidden="true" class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="flow-wrap" style="transform:rotate(-14deg)">
+      <div class="flow-line" style="top:20%; animation-duration:26s; animation-delay:-4s"></div>
+      <div class="flow-line" style="top:52%; width:45%; animation-duration:34s; animation-delay:-18s"></div>
+    </div>
+    <div class="flow-wrap" style="transform:rotate(11deg)">
+      <div class="flow-line" style="top:36%; animation-duration:22s; animation-delay:-9s"></div>
+      <div class="flow-wrap" style="transform:rotate(9deg); top:70%; width:50%;">
+        <div class="flow-line" style="top:70%; animation-duration:30s; animation-delay:-24s"></div>
+      </div>
+    </div>
+  </div>
+  <div aria-hidden="true" class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="flow-ray" style="left:0; top:14%; width:64vw; transform:rotate(34deg); animation-delay:-2s"></div>
+    <div class="flow-ray" style="left:0; top:48%; width:56vw; transform:rotate(3deg); animation-delay:-9s"></div>
+    <div class="flow-ray" style="left:0; top:78%; width:62vw; transform:rotate(-28deg); animation-delay:-5s"></div>
+    <div class="flow-ray" style="left:12%; top:100%; width:58vw; transform:rotate(-43deg); animation-delay:-13s"></div>
+    <div class="flow-ray flow-ray-right" style="right:0; top:19%; width:60vw; transform:rotate(-31deg); animation-delay:-7s"></div>
+    <div class="flow-ray flow-ray-right" style="right:0; top:51%; width:54vw; transform:rotate(-1deg); animation-delay:-15s"></div>
+    <div class="flow-ray flow-ray-right" style="right:0; top:75%; width:58vw; transform:rotate(25deg); animation-delay:-4s"></div>
+    <div class="flow-ray flow-ray-right" style="right:13%; top:100%; width:57vw; transform:rotate(46deg); animation-delay:-11s"></div>
+  </div>
+  <div aria-hidden="true" class="absolute inset-0 bg-dots-light opacity-70 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)] pointer-events-none"></div>
+  <div class="max-w-max-width-content mx-auto px-gutter-desktop relative lg:h-full lg:flex lg:flex-col">
+    <div data-reveal class="text-center max-w-3xl mx-auto pt-space-3xl pb-space-md lg:pt-space-lg lg:pb-space-xs space-y-space-xs lg:shrink-0">
       <h2 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Nuestros 3 productos insignia</h2>
       <p class="font-body-lg text-body-lg text-on-surface-variant">
         Tres productos vivos, miles de usuarios reales y un mismo estándar de ingeniería.
       </p>
     </div>
 
-    <div data-caro3d class="relative select-none pt-space-xs pb-space-2xl" data-caro-current="0">
+    <div data-caro3d class="relative select-none pt-space-xs pb-space-2xl lg:flex-1 lg:min-h-0 lg:flex lg:flex-col lg:justify-center lg:pb-space-sm" data-caro-current="0">
       <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.22), transparent 62%); filter:blur(30px)"></div>
-      <div class="caro-perspective relative h-[34rem] sm:h-[30rem] cursor-grab active:cursor-grabbing">
+      <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[56rem] h-[56rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.28), transparent 62%); filter:blur(30px)"></div>
+      <div class="caro-perspective caro-viewport relative h-[34rem] sm:h-[30rem] cursor-grab active:cursor-grabbing lg:shrink-0">
         {PRODUCTS.map((p, i) => (
-          <article data-caro-face class="caro-face absolute left-1/2 top-1/2 w-[85vw] max-w-[30rem] flex flex-col justify-center text-center px-4 sm:px-space-lg lg:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
+          <article data-caro-face class="caro-face absolute left-1/2 top-1/2 w-[88vw] max-w-[34rem] h-[calc(100%-1rem)] flex flex-col justify-center text-center px-4 sm:px-space-lg lg:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
             <img src={p.logo} width="96" height="96" alt={`${p.name} logo`} class="w-14 h-14 object-contain drop-shadow-lg mt-space-xl mb-space-sm self-center" />
             <span class={`px-3 py-1 rounded-full font-label-sm text-label-sm ${p.badgeBg} ${p.badgeText} font-semibold mb-space-md self-center`}>{p.badge}</span>
             <h3 class="font-display-hero text-display-hero-mobile tracking-tight font-extrabold drop-shadow-sm" style={`color:${p.faceInk}`}>{p.name}</h3>
@@ -122,13 +147,13 @@ const PRODUCTS = [
           </article>
         ))}
       </div>
-      <button data-caro-prev aria-label="Anterior" class="absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
+      <button data-caro-prev aria-label="Anterior" style="left:max(1.25rem, calc(50% - min(44vw, 17rem) - 5rem)); top:calc(50% - 2rem)" class="hidden sm:flex absolute -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
-      <button data-caro-next aria-label="Siguiente" class="absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
+      <button data-caro-next aria-label="Siguiente" style="right:max(1.25rem, calc(50% - min(44vw, 17rem) - 5rem)); top:calc(50% - 2rem)" class="hidden sm:flex absolute -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
-      <div class="flex items-center justify-center gap-space-md mt-space-md relative z-10">
+      <div class="flex items-center justify-center gap-space-md mt-space-md lg:mt-space-xs relative z-10 lg:shrink-0">
         {PRODUCTS.map((p, i) => (
           <button data-caro-dot={i} aria-label={`Ver ${p.name}`} class="caro-dot"></button>
         ))}
@@ -140,6 +165,10 @@ const PRODUCTS = [
 </section>
 
 <style is:global>
+  @media (min-width: 1024px) {
+    .caro-perspective.caro-viewport { height: min(30rem, calc(100dvh - 24rem)); }
+  }
+
   .caro-perspective { perspective: 1500px; touch-action: pan-y; }
   .caro-face {
     transform: translate(-50%, -50%) translateX(var(--tx, 0px)) rotateY(var(--ry, 0deg)) scale(var(--sc, 1));

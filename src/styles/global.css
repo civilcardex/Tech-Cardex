@@ -89,3 +89,78 @@ header[data-header].is-scrolled {
     transition: none;
   }
 }
+
+/* Mazo apilado de productos */
+.caro-perspective { perspective: 1500px; touch-action: pan-y; }
+.caro-face {
+  transform: translate(-50%, -50%) translateY(var(--ty, 0px)) scale(var(--sc, 1));
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, box-shadow 0.45s ease;
+  border-radius: 1.25rem;
+  box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.3);
+  backface-visibility: hidden;
+}
+.caro-face[data-pos="0"] { --tx: 0px; --sc: 1; --ty: 0px; opacity: 1; z-index: 3; pointer-events: auto; }
+.caro-face[data-pos="1"] { --sc: 0.94; --ty: 16px; opacity: 0.65; z-index: 2; pointer-events: none; }
+.caro-face[data-pos="2"] { --sc: 0.88; --ty: 30px; opacity: 0.4; z-index: 1; pointer-events: none; }
+.caro-face[data-pos="0"]:hover {
+  box-shadow:
+    0 0 0 2.5px rgba(233, 207, 122, 0.95),
+    0 0 18px rgba(233, 207, 122, 0.55),
+    0 0 60px rgba(201, 169, 97, 0.55),
+    0 24px 64px -16px rgba(0, 0, 0, 0.35);
+}
+.name-rule {
+  display: block; height: 3px; width: 5.5rem; margin: 0.65rem auto 0; border-radius: 9999px;
+  background: linear-gradient(90deg, #e9cf7a, #b8952e);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
+}
+.caro-face[data-pos="0"] .name-rule { transform: scaleX(1); }
+.caro-num {
+  color: #b8952e; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em;
+  min-width: 1.7rem; padding-top: 0.15rem; font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.caro-dot {
+  width: 0.65rem; height: 0.65rem; border-radius: 9999px;
+  background: rgba(19, 27, 46, 0.18); border: none; cursor: pointer;
+  transition: all 0.3s ease;
+}
+.caro-dot.is-active { background: #b8952e; transform: scale(1.35); }
+
+/* Barajado al salir la carta del frente */
+@keyframes deal-out {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  40% { transform: translate(-38%, -66%) rotate(9deg) scale(1.05); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+.caro-face.deal-out { animation: deal-out 0.38s ease-out; }
+
+/* Lineas de flujo diagonales */
+@keyframes flow-x {
+  0% { transform: translateX(-30%); }
+  100% { transform: translateX(130%); }
+}
+.flow-line {
+  position: absolute; left: 0; height: 1px; width: 60%;
+  background: linear-gradient(90deg, transparent, rgba(74, 58, 16, 0.24), transparent);
+  animation: flow-x linear infinite;
+}
+.flow-wrap { position: absolute; inset: -20%; pointer-events: none; }
+
+/* Rayos tenues que convergen hacia el centro del carrusel */
+@keyframes flow-ray {
+  0%, 100% { opacity: 0.08; }
+  50% { opacity: 0.32; }
+}
+.flow-ray {
+  position: absolute;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, transparent, rgba(74, 58, 16, 0.32), transparent);
+  animation: flow-ray 13s ease-in-out infinite;
+}
+.flow-ray-right { left: auto; transform-origin: right center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-line, .flow-ray { animation: none; opacity: 0.15; }
+}
