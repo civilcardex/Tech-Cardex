@@ -4,6 +4,7 @@ const PRODUCTS = [
     badge: 'Plataforma Web • B2B',
     badgeBg: 'bg-white/90 ring-1 ring-black/10',
     badgeText: 'text-[#6b5410]',
+    slug: 'civilcardex',
     name: 'CivilCardex',
     tagline: 'Plataforma web de inteligencia en ingeniería civil',
     taglineColor: 'text-[#9a7b1f]',
@@ -32,6 +33,7 @@ const PRODUCTS = [
     badge: 'App Móvil • Google Play',
     badgeBg: 'bg-white/90 ring-1 ring-black/10',
     badgeText: 'text-[#6b5410]',
+    slug: 'reverzo',
     name: 'Reverzo',
     tagline: 'Compra, vende y revende libros',
     taglineColor: 'text-[#8a6a15]',
@@ -60,6 +62,7 @@ const PRODUCTS = [
     badge: 'App Móvil • Google Play',
     badgeBg: 'bg-white/90 ring-1 ring-black/10',
     badgeText: 'text-[#6b5410]',
+    slug: 'suti',
     name: 'Suti',
     tagline: 'Lleva el control de tu vida financiera, tu saldo y tus gastos',
     taglineColor: 'text-[#6b7080]',
@@ -126,7 +129,7 @@ const PRODUCTS = [
       <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[56rem] h-[56rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.28), transparent 62%); filter:blur(30px)"></div>
       <div class="caro-perspective caro-viewport relative h-[34rem] sm:h-[30rem] cursor-grab active:cursor-grabbing lg:shrink-0">
         {PRODUCTS.map((p, i) => (
-          <article data-caro-face class="caro-face absolute left-1/2 top-1/2 w-[88vw] max-w-[34rem] h-[calc(100%-1rem)] flex flex-col justify-center text-center px-4 sm:px-space-lg lg:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
+          <article data-caro-face data-slug={p.slug} class="caro-face absolute left-1/2 top-1/2 w-[88vw] max-w-[34rem] h-[calc(100%-1rem)] flex flex-col justify-center text-center px-4 sm:px-space-lg lg:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
             <img src={p.logo} width="96" height="96" alt={`${p.name} logo`} class="w-14 h-14 object-contain drop-shadow-lg mt-space-xl mb-space-sm self-center" />
             <span class={`px-3 py-1 rounded-full font-label-sm text-label-sm ${p.badgeBg} ${p.badgeText} font-semibold mb-space-md self-center`}>{p.badge}</span>
             <h3 class="font-display-hero text-display-hero-mobile tracking-tight font-extrabold drop-shadow-sm" style={`color:${p.faceInk}`}>{p.name}</h3>
