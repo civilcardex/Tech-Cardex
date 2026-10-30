@@ -128,6 +128,7 @@ const PRODUCTS = [
       <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.22), transparent 62%); filter:blur(30px)"></div>
       <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[56rem] h-[56rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.28), transparent 62%); filter:blur(30px)"></div>
       <div class="caro-perspective caro-viewport relative h-[34rem] sm:h-[30rem] cursor-grab active:cursor-grabbing lg:shrink-0">
+        <div data-caro-spin class="caro-spin">
         {PRODUCTS.map((p, i) => (
           <article data-caro-face data-slug={p.slug} class="caro-face absolute left-1/2 top-1/2 w-[88vw] max-w-[34rem] h-[calc(100%-1rem)] flex flex-col justify-center text-center px-4 sm:px-space-lg lg:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
             <img src={p.logo} width="96" height="96" alt={`${p.name} logo`} class="w-14 h-14 object-contain drop-shadow-lg mt-space-xl mb-space-sm self-center" />
@@ -173,17 +174,24 @@ const PRODUCTS = [
   }
 
   .caro-perspective { perspective: 1500px; touch-action: pan-y; }
+  .caro-spin {
+    position: relative;
+    margin-inline: auto;
+    width: var(--fw, 34rem);
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
   .caro-face {
-    transform: translate(-50%, -50%) translateX(var(--tx, 0px)) rotateY(var(--ry, 0deg)) scale(var(--sc, 1));
-    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease, box-shadow 0.9s ease;
+    position: absolute;
+    inset: 0;
+    transform: rotateY(calc(var(--fi) * 120deg)) translateZ(var(--rr, 190px));
     border-radius: 1.25rem;
-    box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.35);
     backface-visibility: hidden;
   }
-  .caro-face[data-pos="0"] { --tx: 0px; --ry: 0deg; --sc: 1; opacity: 1; z-index: 3; pointer-events: auto; }
-  .caro-face[data-pos="-1"] { --tx: -98%; --ry: 55deg; --sc: 0.8; opacity: 0.45; z-index: 2; pointer-events: none; }
-  .caro-face[data-pos="1"] { --tx: 98%; --ry: -55deg; --sc: 0.8; opacity: 0.45; z-index: 2; pointer-events: none; }
-  .caro-face[data-pos="hidden"] { opacity: 0; z-index: 1; pointer-events: none; }
+  .caro-face[data-pos="0"] { pointer-events: auto; }
+  .caro-face[data-pos="-1"], .caro-face[data-pos="1"] { pointer-events: none; }
   .name-rule {
     display: block; height: 3px; width: 5.5rem; margin: 0.65rem auto 0; border-radius: 9999px;
     background: linear-gradient(90deg, #f6dfa0, #b8952e);

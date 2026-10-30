@@ -132,14 +132,6 @@ header[data-header].is-scrolled {
   transform: scale(1.35);
 }
 
-/* Barajado al salir la carta del frente */
-@keyframes deal-out {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  40% { transform: translate(-38%, -66%) rotate(9deg) scale(1.05); }
-  100% { transform: translate(-50%, -50%) scale(1); }
-}
-.caro-face.deal-out { animation: deal-out 0.38s ease-out; }
-
 /* Lineas de flujo diagonales */
 @keyframes flow-x {
   0% { transform: translateX(-30%); }

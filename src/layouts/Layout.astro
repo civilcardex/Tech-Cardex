@@ -142,9 +142,18 @@ const { title = 'TechCardex' } = Astro.props;
             const n = faces.length;
             if (!n) return;
             let cur = 0;
+            let turn = 0; // acumulado en grados: siempre gira hacia la derecha
 
             /** Sincroniza posicion visual, dots y accesibilidad teclado. */
+            const spin = caro.querySelector('[data-caro-spin]');
+            const setRadius = () => {
+              const fw = faces[0].offsetWidth;
+              if (fw) caro.style.setProperty('--rr', (fw / 2 / Math.tan(Math.PI / 3)).toFixed(1) + 'px');
+            };
+            setRadius();
+            window.addEventListener('resize', setRadius, { passive: true });
             const upd = () => {
+              if (spin) spin.style.transform = 'rotateY(' + (-turn) + 'deg)';
               faces.forEach((f, i) => {
                 const rel = ((i - cur) % n + n) % n;
                 f.dataset.pos = rel === 0 ? '0' : 'hidden';
@@ -167,17 +176,31 @@ const { title = 'TechCardex' } = Astro.props;
              * @param {number} dir -1 o 1
              * @returns {void}
              */
+            /**
+             * Gira SIEMPRE hacia la derecha (grados positivos), sin reiniciar al dar la vuelta.
+             * @param {number} dir -1 o 1
+             * @returns {void}
+             */
             const go = (dir) => {
               const leaving = faces[cur];
               leaving.classList.add('deal-out');
               leaving.addEventListener('animationend', () => leaving.classList.remove('deal-out'), { once: true });
-              cur = (cur + dir + n) % n;
+              turn += 120;
+              cur = ((turn / 120) % n + n) % n;
               upd();
             };
 
-            caro.querySelector('[data-caro-prev]').addEventListener('click', () => go(-1));
-            caro.querySelector('[data-caro-next]').addEventListener('click', () => go(1));
-            dots.forEach((d, di) => d.addEventListener('click', () => { cur = di; upd(); }));
+            let timer = 0;
+            const startAuto = () => {
+              clearInterval(timer);
+              timer = setInterval(() => {
+                if (!document.hidden) go(1);
+              }, 10000);
+            };
+            const goUser = (dir) => { go(dir); startAuto(); };
+            caro.querySelector('[data-caro-prev]').addEventListener('click', () => goUser(-1));
+            caro.querySelector('[data-caro-next]').addEventListener('click', () => goUser(1));
+            dots.forEach((d, di) => d.addEventListener('click', () => { const delta = ((di * 120 - turn) % (n * 120) + (n * 120)) % (n * 120); turn += delta; cur = di; upd(); startAuto(); }));
 
             // Enlaces externos (p. ej. footer) que deben abrir una tarjeta concreta
             document.querySelectorAll('[data-caro-goto]').forEach((link) => {
@@ -204,12 +227,13 @@ const { title = 'TechCardex' } = Astro.props;
               if (sx === null) return;
               const dx = e.clientX - sx;
               sx = null;
-              if (Math.abs(dx) > 48) go(dx < 0 ? 1 : -1);
+              if (Math.abs(dx) > 48) goUser(dx < 0 ? 1 : -1);
             });
             zone.addEventListener('click', (e) => {
               if (dragged) { e.preventDefault(); dragged = false; }
             }, true);
             upd();
+            startAuto();
           });
         };
 
