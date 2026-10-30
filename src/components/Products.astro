@@ -151,16 +151,16 @@ const PRODUCTS = [
           </article>
         ))}
       </div>
-      <button data-caro-prev aria-label="Anterior" style="left:max(1.25rem, calc(50% - min(44vw, 17rem) - 5rem)); top:calc(50% - 2rem)" class="hidden sm:flex absolute -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
-        <span class="material-symbols-outlined">chevron_left</span>
-      </button>
-      <button data-caro-next aria-label="Siguiente" style="right:max(1.25rem, calc(50% - min(44vw, 17rem) - 5rem)); top:calc(50% - 2rem)" class="hidden sm:flex absolute -translate-y-1/2 z-20 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white shadow-lg ring-1 ring-black/5 flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
-        <span class="material-symbols-outlined">chevron_right</span>
-      </button>
-      <div class="flex items-center justify-center gap-space-md mt-space-md lg:mt-space-xs relative z-10 lg:shrink-0">
+      <div class="flex items-center justify-center gap-space-md mt-space-md lg:mt-space-sm relative z-10 lg:shrink-0">
+        <button data-caro-prev aria-label="Anterior" class="caro-arrow hidden sm:flex w-9 h-9 sm:w-10 sm:h-10 items-center justify-center transition-opacity hover:opacity-60">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
         {PRODUCTS.map((p, i) => (
           <button data-caro-dot={i} aria-label={`Ver ${p.name}`} class="caro-dot"></button>
         ))}
+        <button data-caro-next aria-label="Siguiente" class="caro-arrow hidden sm:flex w-9 h-9 sm:w-10 sm:h-10 items-center justify-center transition-opacity hover:opacity-60">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
       </div>
 
       </div>
@@ -212,6 +212,10 @@ const PRODUCTS = [
   .caro-num {
     color: #b8952e; font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em;
     min-width: 1.7rem; padding-top: 0.15rem; font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .caro-arrow .material-symbols-outlined {
+    color: #000;
+    font-size: 1.25rem;
   }
   .caro-dot {
     width: 0.65rem; height: 0.65rem; border-radius: 9999px;
