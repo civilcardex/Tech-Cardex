@@ -170,7 +170,7 @@ const PRODUCTS = [
 
 <style is:global>
   @media (min-width: 1024px) {
-    .caro-perspective.caro-viewport { height: clamp(30rem, calc(100dvh - 16rem), 34rem); }
+    .caro-perspective.caro-viewport { height: min(30rem, calc(100dvh - 24rem)); }
   }
 
   .caro-perspective { perspective: 1500px; touch-action: pan-y; }
