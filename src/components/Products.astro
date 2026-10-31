@@ -127,7 +127,7 @@ const PRODUCTS = [
     <div data-caro3d class="relative select-none pt-space-xs pb-space-2xl lg:flex-1 lg:min-h-0 lg:flex lg:flex-col lg:justify-center lg:pb-space-sm" data-caro-current="0">
       <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[42rem] h-[42rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.22), transparent 62%); filter:blur(30px)"></div>
       <div aria-hidden="true" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[56rem] h-[56rem] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(201,169,97,0.28), transparent 62%); filter:blur(30px)"></div>
-      <div class="caro-perspective caro-viewport relative h-[34rem] sm:h-[30rem] cursor-grab active:cursor-grabbing lg:shrink-0">
+      <div class="caro-perspective caro-viewport relative h-[33rem] sm:h-[30rem] cursor-grab active:cursor-grabbing lg:shrink-0">
         <div data-caro-spin class="caro-spin">
         {PRODUCTS.map((p, i) => (
           <article data-caro-face data-slug={p.slug} class="caro-face flex flex-col justify-center text-center px-4 sm:px-space-lg lg:px-space-xl pb-space-lg" style={`--fi:${i}; background:linear-gradient(135deg, #000000 0%, #0b0b0e 40%, #5d5d6b 100%)`}>
@@ -171,6 +171,27 @@ const PRODUCTS = [
 <style is:global>
   @media (min-width: 1024px) {
     .caro-perspective.caro-viewport { height: min(30rem, calc(100dvh - 24rem)); }
+  }
+  @media (max-width: 639px) {
+    .caro-face { padding-bottom: 0.5rem; }
+    .caro-face img { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+    .caro-face .mb-space-md { margin-bottom: 0.5rem; }
+    .caro-face h3 { font-size: 2rem; line-height: 1.1; }
+    .caro-face .name-rule { margin-top: 0.4rem; }
+    .caro-face p { margin-bottom: 0.5rem; }
+    .caro-face .space-y-space-xs { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+    .caro-face a[data-caro-link] { height: 2.75rem; }
+  }
+  @media (min-width: 1024px) and (max-height: 840px) {
+    .caro-perspective.caro-viewport { height: clamp(25rem, calc(100dvh - 26rem), 30rem); }
+    .caro-face { padding-bottom: 0.5rem; }
+    .caro-face img { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+    .caro-face .mb-space-md { margin-bottom: 0.5rem; }
+    .caro-face h3 { font-size: 2rem; line-height: 1.1; }
+    .caro-face .name-rule { margin-top: 0.4rem; }
+    .caro-face p { margin-bottom: 0.5rem; }
+    .caro-face .space-y-space-xs { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+    .caro-face a[data-caro-link] { height: 2.75rem; }
   }
 
   .caro-perspective { perspective: 1500px; touch-action: pan-y; }
