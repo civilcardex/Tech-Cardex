@@ -62,76 +62,20 @@ const { title = 'TechCardex' } = Astro.props;
           window.addEventListener('resize', onScroll, { passive: true });
         };
 
-        /**
-         * Anima un contador [data-count-to] hasta su valor final.
-         * @param {HTMLElement} el
-         * @returns {void}
-         */
-        const runCount = (el) => {
-          const target = parseFloat(el.dataset.countTo);
-          const decimals = parseInt(el.dataset.decimals || '0', 10);
-          const start = performance.now();
-          const duration = 1400;
-          const tick = (now) => {
-            const p = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = (target * eased).toFixed(decimals);
-            if (p < 1) setTimeout(() => tick(performance.now()), 16);
-          };
-          tick(start);
-        };
-
-        /** Contadores: se animan al entrar en viewport (texto final si reduced-motion). */
-        const initCounters = () => {
-          const counters = document.querySelectorAll('[data-count-to]');
-          if (reduced) {
-            counters.forEach((el) => {
-              el.textContent = parseFloat(el.dataset.countTo).toFixed(parseInt(el.dataset.decimals || '0', 10));
-            });
-            return;
-          }
+        /** Header sombra + barra de progreso: un solo listener de scroll. */
+        const initChrome = () => {
+          const header = document.querySelector('[data-header]');
+          const bar = document.querySelector('[data-progress]');
           const onScroll = () => {
-            counters.forEach((el) => {
-              if (el.dataset.done) return;
-              const r = el.getBoundingClientRect();
-              if (r.top < window.innerHeight && r.bottom > 0) {
-                el.dataset.done = '1';
-                runCount(el);
-              }
-            });
+            if (header) header.classList.toggle('is-scrolled', window.scrollY > 8);
+            if (bar) {
+              const max = document.documentElement.scrollHeight - window.innerHeight;
+              bar.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0).toFixed(4) + ')';
+            }
           };
           onScroll();
           window.addEventListener('scroll', onScroll, { passive: true });
-        };
-
-        /** Aparicion [data-reveal] por scroll + red de seguridad a 4s. */
-        const initReveals = () => {
-          const pending = new Set(document.querySelectorAll('[data-reveal]'));
-          const check = () => {
-            const vh = window.innerHeight;
-            pending.forEach((el) => {
-              const r = el.getBoundingClientRect();
-              if (r.top < vh - 40 && r.bottom > 0) {
-                el.classList.add('revealed');
-                pending.delete(el);
-              }
-            });
-          };
-          if (reduced) {
-            pending.forEach((el) => el.classList.add('revealed'));
-            return;
-          }
-          window.addEventListener('scroll', check, { passive: true });
-          window.addEventListener('resize', check, { passive: true });
-          check();
-          // Red de seguridad: si en 4s no ha llegado ningun scroll, revelar todo
-          let scrolled = false;
-          window.addEventListener('scroll', () => { scrolled = true; }, { passive: true, once: true });
-          setTimeout(() => {
-            if (scrolled) return;
-            pending.forEach((el) => el.classList.add('revealed'));
-            pending.clear();
-          }, 4000);
+          window.addEventListener('resize', onScroll, { passive: true });
         };
 
         /** Carrusel 3D coverflow: flechas, dots, arrastre y accesibilidad. */
@@ -167,26 +111,26 @@ const { title = 'TechCardex' } = Astro.props;
             };
 
             /**
-             * Avanza el carrusel.
-             * @param {number} dir -1 o 1
-             * @returns {void}
-             */
-            /**
-             * Avanza el carrusel; la carta que sale se "baraja" hacia el fondo.
-             * @param {number} dir -1 o 1
-             * @returns {void}
-             */
-            /**
-             * Gira SIEMPRE hacia la derecha (grados positivos), sin reiniciar al dar la vuelta.
-             * @param {number} dir -1 o 1
+             * Gira SIEMPRE hacia la derecha (+120deg), sin reiniciar al dar la
+             * vuelta completa; ambos botones avanzan el mazo en el mismo sentido.
+             * @param {number} dir -1 o 1 (ambos giran a la derecha)
              * @returns {void}
              */
             const go = (dir) => {
-              const leaving = faces[cur];
-              leaving.classList.add('deal-out');
-              leaving.addEventListener('animationend', () => leaving.classList.remove('deal-out'), { once: true });
               turn += 120;
               cur = ((turn / 120) % n + n) % n;
+              upd();
+            };
+
+            /**
+             * Gira hacia la carta dada por el camino mas corto hacia la derecha.
+             * @param {number} idx indice de la carta destino
+             * @returns {void}
+             */
+            const goToIndex = (idx) => {
+              const delta = ((idx * 120 - turn) % (n * 120) + (n * 120)) % (n * 120);
+              turn += delta;
+              cur = idx;
               upd();
             };
 
@@ -194,7 +138,10 @@ const { title = 'TechCardex' } = Astro.props;
             const startAuto = () => {
               clearInterval(timer);
               timer = setInterval(() => {
-                if (!document.hidden) go(1);
+                if (document.hidden) return;
+                const r = caro.getBoundingClientRect();
+                const visible = r.top < innerHeight && r.bottom > 0;
+                if (visible) go(1);
               }, 10000);
             };
             const goUser = (dir) => { go(dir); startAuto(); };
@@ -208,8 +155,7 @@ const { title = 'TechCardex' } = Astro.props;
                 const idx = faces.findIndex((f) => f.dataset.slug === link.dataset.caroGoto);
                 if (idx < 0) return;
                 e.preventDefault();
-                cur = idx;
-                upd();
+                goToIndex(idx);
                 caro.closest('section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
               });
             });
@@ -237,10 +183,7 @@ const { title = 'TechCardex' } = Astro.props;
           });
         };
 
-        safeInit('header', initHeader);
-        safeInit('progress', initProgress);
-        safeInit('counters', initCounters);
-        safeInit('reveals', initReveals);
+        safeInit('chrome', initChrome);
         safeInit('carousel', initCarousel);
       });
     </script>
